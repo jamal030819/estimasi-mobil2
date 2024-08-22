@@ -1,10 +1,7 @@
 import pickle
 import streamlit as st
 import pandas as pd
-import locale
 
-# Set locale untuk Indonesia
-locale.setlocale(locale.LC_ALL, 'id_ID.UTF-8')
 
 model = pickle.load(open('estimasi_mobil.sav', 'rb'))
 
@@ -87,20 +84,16 @@ else:
 
 predict = ''
 
-
 # Tombol untuk melakukan estimasi harga, aktif jika mobil sudah dipilih           
 if st.button('Estimasi Harga', disabled=button_disabled):
 #if st.button('Estimasi Harga'):
     predict = model.predict(
         [[selected_year, selected_km, selected_pajak, selected_mpg, selected_ukuran]]
     )
-    # Format angka menjadi Rupiah
-    formatted_rupiah = locale.currency(predict*19000, grouping=True, symbol=True)
-   
     st.markdown("<hr>", unsafe_allow_html=True)
     st.markdown(f"<h2 style='text-align: center; color: #FF5733;'>Hasil Estimasi Harga</h2>", unsafe_allow_html=True)
     st.metric('Estimasi Harga Mobil Bekas dalam Ponds :', predict)
-    st.metric('Estimasi Harga Mobil Bekas dalam IDR', formatted_rupiah)
+    st.metric('Estimasi Harga Mobil Bekas dalam IDR', predict*19000)
    
 
    
